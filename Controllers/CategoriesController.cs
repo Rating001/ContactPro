@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ContactPro.Data;
 using ContactPro.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ContactPro.Controllers
 {
@@ -18,14 +19,14 @@ namespace ContactPro.Controllers
         {
             _context = context;
         }
-
+        [Authorize]
         // GET: Categories
         public async Task<IActionResult> Index()
         {
             var applicationDbContext = _context.Categories.Include(c => c.AppUser);
             return View(await applicationDbContext.ToListAsync());
         }
-
+        [Authorize]
         // GET: Categories/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -44,7 +45,7 @@ namespace ContactPro.Controllers
 
             return View(category);
         }
-
+        [Authorize]
         // GET: Categories/Create
         public IActionResult Create()
         {
@@ -68,7 +69,7 @@ namespace ContactPro.Controllers
             ViewData["AppUserId"] = new SelectList(_context.Users, "Id", "Id", category.AppUserId);
             return View(category);
         }
-
+        [Authorize]
         // GET: Categories/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -121,7 +122,7 @@ namespace ContactPro.Controllers
             ViewData["AppUserId"] = new SelectList(_context.Users, "Id", "Id", category.AppUserId);
             return View(category);
         }
-
+        [Authorize]
         // GET: Categories/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {

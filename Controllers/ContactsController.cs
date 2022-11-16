@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 using ContactPro.Data;
 using ContactPro.Models;
 
@@ -18,14 +20,14 @@ namespace ContactPro.Controllers
         {
             _context = context;
         }
-
+        [Authorize]
         // GET: Contacts
         public async Task<IActionResult> Index()
         {
             var applicationDbContext = _context.Contacts.Include(c => c.AppUser);
             return View(await applicationDbContext.ToListAsync());
         }
-
+        [Authorize]
         // GET: Contacts/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -44,7 +46,7 @@ namespace ContactPro.Controllers
 
             return View(contact);
         }
-
+        [Authorize]
         // GET: Contacts/Create
         public IActionResult Create()
         {
@@ -68,7 +70,7 @@ namespace ContactPro.Controllers
             ViewData["AppUserID"] = new SelectList(_context.Users, "Id", "Id", contact.AppUserID);
             return View(contact);
         }
-
+        [Authorize]
         // GET: Contacts/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -121,7 +123,7 @@ namespace ContactPro.Controllers
             ViewData["AppUserID"] = new SelectList(_context.Users, "Id", "Id", contact.AppUserID);
             return View(contact);
         }
-
+        [Authorize]
         // GET: Contacts/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
