@@ -38,6 +38,35 @@ namespace ContactPro.Controllers
 
             return View(await categories);
         }
+
+        [Authorize]
+        public async Task<IActionResult> EmailCategory(int id)
+        {
+
+            string appUserId = _userManager.GetUserId(User);
+
+            Category category = await _context.Categories
+                                              .Include(c => c.Contacts)
+                                              .FirstOrDefaultAsync(c => c.Id == id && c.AppUserId == appUserId);
+
+            List<string> emails = category.Contacts.Select(c => c.Email).ToList();
+
+            EmailData emailData = new EmailData()
+            {
+                GroupName = category.Name,
+                EmailAddress = String.Join(";", emails),
+                Subject = $"Group Message: {category.Name}"
+            };
+
+            EmailCategoryViewModel model = new EmailCategoryViewModel()
+            {
+                Contacts = category.Contacts.ToList(),
+                EmailData = emailData
+            };
+
+            return View(model);
+        }
+
         [Authorize]
         // GET: Categories/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -97,7 +126,7 @@ namespace ContactPro.Controllers
 
             var category = await _context.Categories.Where(c => c.Id == id && c.AppUserId == appUserId)
                                                     .FirstOrDefaultAsync();
-                                                    
+
             if (category == null)
             {
                 return NotFound();
@@ -177,14 +206,14 @@ namespace ContactPro.Controllers
             {
                 _context.Categories.Remove(category);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool CategoryExists(int id)
         {
-          return _context.Categories.Any(e => e.Id == id);
+            return _context.Categories.Any(e => e.Id == id);
         }
     }
 }
