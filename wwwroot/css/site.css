@@ -16,6 +16,10 @@ body {
     height: 100%;
 }
 
+
+
+
+
 body {
     /* fallback for old browsers */
     background-color: var(--cf-primaryColorLight);
@@ -151,9 +155,20 @@ main {
         cursor: pointer;
     }
 
+.imgicon {
+    display: inline;
+    height: 3.5rem;
+    margin: 0rem .3rem;
+}
 
 .icon {
     font-size: 3.5rem;
+}
+
+figcaption {
+    color: #131313;
+    font-size: 0.8rem;
+    text-align: center;
 }
 
 .footer {
